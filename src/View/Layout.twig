@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Silex Bootstrap - {% block title %}No Title{% endblock %}</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  {% block head %} {% endblock %}
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <h1>{% block title_page %}Minimalist application.{% endblock %}</h1><hr>
+    </div>
+    <div class="row">
+      {% block content %}FrontEnd:Powered by bootstrap.{% endblock %}
+    </div>
+  </div>
+  <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  {% block closing_scripts %}{% endblock %}
+</body>
+</html>
