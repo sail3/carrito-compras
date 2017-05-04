@@ -54,4 +54,16 @@ class DefaultControllerTest extends WebTestCase
     $this->assertInternalType('int', $responseData['total']);
   }
 
+  public function testStore()
+  {
+    $client = $this->createClient();
+    $client->request('GET', '/my-car');
+    $crawler = $client->getCrawler();
+
+    $this->assertTrue($client->getResponse()->isOk());
+    $this->assertGreaterThan(0, $crawler->filter('h1')->count());
+    $this->assertGreaterThan(0, $crawler->filter('.btn-success')->count());
+    $this->assertGreaterThan(0, $crawler->filter('.btn-danger')->count());
+  }
+
 }

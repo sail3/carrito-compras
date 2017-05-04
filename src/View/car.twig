@@ -1,0 +1,50 @@
+{% extends 'Layout.twig' %}
+
+{% block title_page %}
+Mi increible tienda online
+{% endblock %}
+
+{% block content %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="text-right">Cantidad</th>
+                <th>Nombre</th>
+                <th class="text-right">Precio unitario</th>
+                <th class="text-right">SubTotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in productos %}
+                <tr>
+                  <td class="text-right">{{ row.cantidad }}</td>
+                  <td>{{ row.producto.nombre }}</td>
+                  <td class="text-right">{{ row.producto.precio }}</td>
+                  <td class="text-right">{{ row.subTotal }}</td>
+                  <td>
+                    <button class="btn btn-primary">Corregir</button>
+                    <button class="btn btn-warning">Quitar</button>
+                  </td>
+                </tr>
+              {% endfor %}
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right">{{ import }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="col-md-12 text-center">
+            <a href="/"><button class="btn btn-success">SeguirComprando</button></a>
+            <a href="javascript:"><button class="btn btn-danger">Eliminar ordenes</button></a>
+          </div>
+{% endblock %}
+
+{% block closing_scripts %}
+<script type="text/javascript">
+  $(document).ready(function () {
+
+  });
+</script>
+{% endblock %}

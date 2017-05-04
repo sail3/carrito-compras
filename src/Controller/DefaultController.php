@@ -50,6 +50,28 @@ class DefaultController
     return new JsonResponse($response);
   }
 
+  public function store(Application $app)
+  {
+    $car = [];
+    $total = 0.0;
+    $productos = $this->productList();
+    $carrito = $app['session']->get('car', []);
+    foreach ($carrito as $key => $value) {
+      $producto = $productos[$key];
+      $subTotal = $producto->getPrecio() * $value;
+      $car[] = [
+        "cantidad" => $value,
+        "producto" => $producto,
+        "subTotal" => $subTotal,
+      ];
+      $total += $subTotal;
+    }
+    return $app['twig']->render('car.twig', [
+      "productos" => $car,
+      "import" => $total,
+    ]);
+  }
+
   /**
    * Devuelve la lista de productos disponibles.
    */

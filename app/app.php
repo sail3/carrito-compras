@@ -11,5 +11,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // Routes
 $app->get("/", "MyApplication\Controller\DefaultController::index");
 $app->post("/add", "MyApplication\Controller\DefaultController::addItem");
+$app->get("/my-car", "MyApplication\Controller\DefaultController::store");
 
 return $app;
