@@ -1,6 +1,9 @@
 <?php
 namespace MyApplication\Controller;
+
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use MyApplication\Entity\Producto;
 /**
  * Default application Controller.
@@ -17,6 +20,39 @@ class DefaultController
     ]);
   }
 
+  /**
+   * Agrega un producto al carrito.
+   */
+  public function addItem(Application $app, Request $request)
+  {
+    $response = [
+      'status' => 500,
+      'msg' => 'Lack parameters',
+    ];
+    if ($request->get('productCode') !== '' && $request->get('productCode') !== null) {
+      $quantity = 0;
+      $total = 0;
+      $carrito = $app['session']->get('car', []);
+      @$carrito[$request->get('productCode')]++;
+      $app['session']->set('car', $carrito);
+      $productList = $this->productList();
+      foreach ($carrito as $key => $value) {
+        $quantity += $value;
+        $total += $productList[$key]->getPrecio() * $value;
+      }
+      $response = [
+        'status' => 200,
+        'msg' => 'Success',
+        'quantity' => $quantity,
+        'total' => $total,
+      ];
+    }
+    return new JsonResponse($response);
+  }
+
+  /**
+   * Devuelve la lista de productos disponibles.
+   */
   public function productList()
   {
     return [

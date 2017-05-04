@@ -2,9 +2,19 @@
 
 {% block title_page %}
 Mi increible tienda online
-<a href="javascript:">
-  <button type="button" name="my-car" class="pull-right btn btn-info">Ver Carrito</button>
-</a>
+
+<div class="panel panel-warning col-md-2 pull-right">
+  <div class="panel-heading">
+    <h3 class="panel-title">Mi Carrito</h3>
+  </div>
+  <div class="panel-body">
+    <strong class="small">Productos</strong><div id="quantity" class="small">123</div>
+    <strong class="small">Importe</strong><div id="total" class="small">123123</div>
+    <a href="javascript:">
+      <button type="button" name="my-car" class="pull-right btn btn-info">Ver Carrito</button>
+    </a>
+  </div>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -22,9 +32,18 @@ Mi increible tienda online
   $(document).ready(function () {
     $(".adding").click(addingProduct);
   });
+
+  /**
+   * Agrega un producto al carrito y actualiza el total y la cantidad
+   * de productos en el resumen.
+   */
   function addingProduct() {
     console.log($(this).attr('id'));
-    $.post("/add",{productCode: $(this).attr('id')});
+    $.post("/add",{productCode: $(this).attr('id')}, function (response) {
+      console.log(response);
+      $("#quantity").text(response.quantity);
+      $("#total").text(response.total);
+    });
   }
 </script>
 {% endblock %}

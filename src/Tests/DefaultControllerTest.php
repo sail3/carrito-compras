@@ -33,4 +33,25 @@ class DefaultControllerTest extends WebTestCase
 
   }
 
+  /**
+   * Prueba si se puede registrar un producto en el carrito.
+   */
+  public function testCanBeAddItem()
+  {
+    $client = $this->createClient();
+    $productCode = rand(1, 10);
+    $data = [
+      'productCode' => $productCode,
+    ];
+    $client->request('POST', '/add', $data);
+    $response = $client->getResponse();
+    $responseData = json_decode($response->getContent(),true);
+
+    $this->assertTrue($client->getResponse()->isOk());
+    $this->assertEquals(200, $responseData['status']);
+    $this->assertEquals('Success', $responseData['msg']);
+    $this->assertInternalType('int', $responseData['quantity']);
+    $this->assertInternalType('int', $responseData['total']);
+  }
+
 }
