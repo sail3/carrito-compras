@@ -1,0 +1,30 @@
+{% extends 'Layout.twig' %}
+
+{% block title_page %}
+Mi increible tienda online
+<a href="javascript:">
+  <button type="button" name="my-car" class="pull-right btn btn-info">Ver Carrito</button>
+</a>
+{% endblock %}
+
+{% block content %}
+{% for producto in productos %}
+  <div class="well col-md-4">
+    <h3>{{ producto.nombre }}</h3>
+    <h4>{{ producto.precio }}</h4>
+    <button id="{{ producto.codigo }}"class="btn btn-success adding">Comprar</button>
+  </div>
+{% endfor %}
+{% endblock %}
+
+{% block closing_scripts %}
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".adding").click(addingProduct);
+  });
+  function addingProduct() {
+    console.log($(this).attr('id'));
+    $.post("/add",{productCode: $(this).attr('id')});
+  }
+</script>
+{% endblock %}
