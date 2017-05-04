@@ -5,46 +5,88 @@ Mi increible tienda online
 {% endblock %}
 
 {% block content %}
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th class="text-right">Cantidad</th>
-                <th>Nombre</th>
-                <th class="text-right">Precio unitario</th>
-                <th class="text-right">SubTotal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in productos %}
-                <tr>
-                  <td class="text-right">{{ row.cantidad }}</td>
-                  <td>{{ row.producto.nombre }}</td>
-                  <td class="text-right">{{ row.producto.precio }}</td>
-                  <td class="text-right">{{ row.subTotal }}</td>
-                  <td>
-                    <button class="btn btn-primary">Corregir</button>
-                    <button class="btn btn-warning">Quitar</button>
-                  </td>
-                </tr>
-              {% endfor %}
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td class="text-right">{{ import }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="col-md-12 text-center">
-            <a href="/"><button class="btn btn-success">SeguirComprando</button></a>
-            <a href="javascript:"><button class="btn btn-danger">Eliminar ordenes</button></a>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th class="text-right">Cantidad</th>
+      <th>Nombre</th>
+      <th class="text-right">Precio unitario</th>
+      <th class="text-right">SubTotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in productos %}
+      <tr>
+        <td class="text-right">{{ row.cantidad }}</td>
+        <td>{{ row.producto.nombre }}</td>
+        <td class="text-right">{{ row.producto.precio }}</td>
+        <td class="text-right">{{ row.subTotal }}</td>
+        <td id="{{ row.producto.codigo }}">
+          <button class="btn btn-primary editOrder" data-toggle="modal" data-target="#modal-edit">Corregir</button>
+          <button class="btn btn-warning">Quitar</button>
+        </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-right">{{ import }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="col-md-12 text-center">
+  <a href="/"><button class="btn btn-success">SeguirComprando</button></a>
+  <a href="javascript:"><button class="btn btn-danger">Eliminar ordenes</button></a>
+</div>
+<div id="modal-edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="gridSystemModalLabel">Ingrese nueva cantidad</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <input id="cantidad" type="text" class="form-control">
           </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button id="updateOrder" type="button" class="btn btn-primary">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block closing_scripts %}
 <script type="text/javascript">
   $(document).ready(function () {
-
+    $("button.editOrder").click(function() {
+      $('#updateOrder').attr("value", $(this).parent().attr("id"));
+    });
+    $("#updateOrder").click(editOrder);
   });
+
+  /**
+   * Hace una peticion el servidor para que edite un pedido.
+   */
+  function editOrder() {
+    let cantidad = parseInt($("#cantidad").val());
+    let codigoProducto = $('#updateOrder').attr("value");
+    if (Number.isInteger(cantidad)) {
+      $.post("/edit-order", {
+        productCode: codigoProducto,
+        quantity: cantidad
+      }, function (response) {
+        $("#modal-edit").modal("toggle");
+        $("#cantidad").val("");
+      });
+    }
+  }
+
 </script>
 {% endblock %}

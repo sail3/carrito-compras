@@ -50,6 +50,9 @@ class DefaultController
     return new JsonResponse($response);
   }
 
+  /**
+   * Muestra el detalle del carrito de compras.
+   */
   public function store(Application $app)
   {
     $car = [];
@@ -70,6 +73,31 @@ class DefaultController
       "productos" => $car,
       "import" => $total,
     ]);
+  }
+
+  /**
+   * Edita una orden.
+   */
+  public function editOrder(Application $app, Request $request)
+  {
+
+    $response = [
+      'status' => 500,
+      'msg' => 'Lack parameters',
+    ];
+    if ($request->get('productCode') !== '' && $request->get('productCode') !== null &&
+        $request->get('quantity') !== '' && $request->get('quantity') !== null ) {
+      $codigoProducto = $request->get('productCode');
+      $cantidadActual = $request->get('quantity');
+      $carrito = $app['session']->get('car', []);
+      $carrito[$codigoProducto] = $cantidadActual;
+      $app['session']->set('car', $carrito);
+      $response = [
+        'status' => 200,
+        'msg' => 'Success',
+      ];
+    }
+    return new JsonResponse($response);
   }
 
   /**

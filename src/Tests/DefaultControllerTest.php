@@ -54,6 +54,9 @@ class DefaultControllerTest extends WebTestCase
     $this->assertInternalType('int', $responseData['total']);
   }
 
+  /**
+   * Prueba la integridad del listado de productos.
+   */
   public function testStore()
   {
     $client = $this->createClient();
@@ -66,4 +69,26 @@ class DefaultControllerTest extends WebTestCase
     $this->assertGreaterThan(0, $crawler->filter('.btn-danger')->count());
   }
 
+  /**
+   * Prueba si se puede editar la orden de unproducto.
+   */
+  public function testEditOrder()
+  {
+    $client = $this->createClient();
+    // $client->request('GET', '/edit-order');
+    // $crawler = $client->getCrawler();
+
+    $data = [
+      "productCode" => 4,
+      "quantity" => 2,
+    ];
+
+    $client->request('POST', "/edit-order", $data);
+    $response = $client->getResponse();
+    $responseData = json_decode($response->getContent(),true);
+
+    $this->assertTrue($client->getResponse()->isOk());
+    $this->assertEquals(200, $responseData['status']);
+    $this->assertEquals('Success', $responseData['msg']);
+  }
 }
