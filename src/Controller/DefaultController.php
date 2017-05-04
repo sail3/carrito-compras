@@ -10,6 +10,12 @@ use MyApplication\Entity\Producto;
  */
 class DefaultController
 {
+  // Descuento promocional.
+  const DESCUENTO = 0.10;
+
+  // Impuestos de ley
+  const IMPUESTO = 0.18;
+
   /**
    * Index Action.
    */
@@ -72,6 +78,8 @@ class DefaultController
     return $app['twig']->render('car.twig', [
       "productos" => $car,
       "import" => $total,
+      "descuento" => self::DESCUENTO,
+      "impuesto" => self::IMPUESTO,
     ]);
   }
 
@@ -97,6 +105,41 @@ class DefaultController
         'msg' => 'Success',
       ];
     }
+    return new JsonResponse($response);
+  }
+
+  /**
+   * Elimina una orden.
+   */
+  public function deleteOrder(Application $app, Request $request)
+  {
+    $response = [
+      'status' => 500,
+      'msg' => 'Lack parameters',
+    ];
+    if ($request->get('productCode') !== '' && $request->get('productCode') !== null) {
+      $codigoProducto = $request->get('productCode');
+      $carrito = $app['session']->get('car', []);
+      unset($carrito[$codigoProducto]);
+      $app['session']->set('car', $carrito);
+      $response = [
+        'status' => 200,
+        'msg' => 'Success',
+      ];
+    }
+    return new JsonResponse($response);
+  }
+
+  /**
+   * Restablece el carrito de compras.
+   */
+  public function clearCar(Application $app, Request $request)
+  {
+    $app['session']->set('car', []);
+    $response = [
+      'status' => 200,
+      'msg' => 'Success',
+    ];
     return new JsonResponse($response);
   }
 

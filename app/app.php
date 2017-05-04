@@ -13,5 +13,7 @@ $app->get("/", "MyApplication\Controller\DefaultController::index");
 $app->post("/add", "MyApplication\Controller\DefaultController::addItem");
 $app->get("/my-car", "MyApplication\Controller\DefaultController::store");
 $app->post("/edit-order", "MyApplication\Controller\DefaultController::editOrder");
+$app->post("/delete-order", "MyApplication\Controller\DefaultController::deleteOrder");
+$app->post("/clear-car", "MyApplication\Controller\DefaultController::clearCar");
 
 return $app;

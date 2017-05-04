@@ -75,9 +75,6 @@ class DefaultControllerTest extends WebTestCase
   public function testEditOrder()
   {
     $client = $this->createClient();
-    // $client->request('GET', '/edit-order');
-    // $crawler = $client->getCrawler();
-
     $data = [
       "productCode" => 4,
       "quantity" => 2,
@@ -91,4 +88,40 @@ class DefaultControllerTest extends WebTestCase
     $this->assertEquals(200, $responseData['status']);
     $this->assertEquals('Success', $responseData['msg']);
   }
+
+  /**
+   * Prueba si se puede eliminar la orden de un producto.
+   */
+  public function testDeleteOrder()
+  {
+    $client = $this->createClient();
+    $data = [
+      "productCode" => 4,
+    ];
+
+    $client->request('POST', "/delete-order", $data);
+    $response = $client->getResponse();
+    $responseData = json_decode($response->getContent(),true);
+
+    $this->assertTrue($client->getResponse()->isOk());
+    $this->assertEquals(200, $responseData['status']);
+    $this->assertEquals('Success', $responseData['msg']);
+  }
+
+  /**
+   * Prueba el restablecimiento del carrito de compras.
+   */
+  public function testClearCar()
+  {
+    $client = $this->createClient();
+
+    $client->request('POST', '/clear-car');
+    $response = $client->getResponse();
+    $responseData = json_decode($response->getContent(),true);
+
+    $this->assertTrue($client->getResponse()->isOk());
+    $this->assertEquals(200, $responseData['status']);
+    $this->assertEquals('Success', $responseData['msg']);
+  }
+
 }
